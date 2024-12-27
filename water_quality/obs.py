@@ -117,7 +117,7 @@ def read_raster(raster_file_path):
 '''
 # Example usage:
 raster_file_path = 'path/to/raster.tif'
-raster_data, raster_transform = load_raster(raster_file_path)
+raster_data, raster_transform = read_raster(raster_file_path)
 '''
 #---------------------------------------------------------------------------------------------------#
 # Function to extract pixel values around points
