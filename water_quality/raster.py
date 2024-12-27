@@ -7,7 +7,7 @@ from osgeo import gdal, osr
 #---------------------------------------------------------------------------------------------------#
 #---------------------------------------------------------------------------------------------------#
 # Read raster data
-def read_raster(raster_file_path):
+def read(raster_file_path):
     '''
     This function loads raster data from a specified file and returns the raster data
     and its affine transform.
@@ -36,7 +36,7 @@ raster_data, raster_transform = read_raster(raster_file_path)
 #---------------------------------------------------------------------------------------------------#
 #---------------------------------------------------------------------------------------------------#
 # Function to reproject raster to a desired EPSG coordinate system
-def reproject_raster(input_path, output_path, epsg_code):
+def reproject(input_path, output_path, epsg_code):
     """
     This function reprojects a raster file to a specified EPSG coordinate system.
 
@@ -79,7 +79,7 @@ reproject_raster(input_path, output_path, epsg_code)
 '''
 #---------------------------------------------------------------------------------------------------#
 #---------------------------------------------------------------------------------------------------#
-def plot_raster(raster_file,
+def plot(raster_file,
                 transform=None,
                 bounds=None, 
                 title=None, 
