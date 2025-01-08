@@ -1,9 +1,114 @@
 #---------------------------------------------------------------------------------------------------#
 # Import libraries
+import os
+from tqdm.auto import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 import rasterio
 from osgeo import gdal, osr
+#---------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------#
+# Check the validity of TIFF files
+def check_tif_files(input_dir):
+    '''
+    This function checks the validity of TIFF files in the specified directory.
+
+    It collects all .tif files from the input directory and its subdirectories, 
+    and verifies each file to determine if it is valid or invalid. A file is 
+    considered valid if it exists, is not empty, and can be opened by GDAL 
+    without errors. 
+    
+    This function explores subdirectories of the input directory.
+
+    The function returns two lists: one containing valid files 
+    and another containing invalid files.
+
+    Parameters:
+    input_dir (str): The directory path where the TIFF files are located.
+
+    Returns:
+    tuple: A tuple containing two lists:
+        - valid_files (list): A list of valid TIFF file paths.
+        - invalid_files (list): A list of invalid TIFF file paths.
+    
+    Last modified: None / None
+    Created on: 2025-01-08
+    Created by: Seongjun Lee
+    '''
+    valid_files = []
+    invalid_files = []
+    raster_files = []
+
+    # Enable GDAL exceptions
+    gdal.UseExceptions()
+    
+    # Collect all .tif files from the input directory and its subdirectories
+    for root, _, files in os.walk(input_dir):
+        for file in files:
+            if file.endswith('.tif'):
+                raster_files.append(os.path.join(root, file))
+    
+    for file in raster_files:
+        # Check if the file exists and is not empty
+        if not os.path.exists(file) or os.path.getsize(file) == 0:
+            invalid_files.append(file)
+            continue
+
+        try:
+            ds = gdal.Open(file)
+            if ds is None or ds.RasterCount == 0:
+                invalid_files.append(file)
+            else:
+                try:
+                    ds.ReadAsArray()
+                except Exception as e:
+                    invalid_files.append(file)
+                else:
+                    valid_files.append(file)
+                finally:
+                    ds = None
+        except RuntimeError as e:  # Handle GDAL errors as RuntimeError
+            invalid_files.append(file)
+    
+    return valid_files, invalid_files
+
+'''
+# Example usage
+raster_dir = '/data/HLS/Korea/L30/new'
+valid_tif_list, invalid_tif_list = check_tif_files(raster_dir)
+'''
+#---------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------#
+# Remove invalid TIFFfiles
+def remove_invalid_tif(invalid_tif_list):
+    '''
+    This function removes invalid files from the filesystem.
+
+    Parameters:
+    invalid_files (list): A list of file paths to be removed.
+
+    Returns:
+    None
+
+    Last modified: None / None
+    Created on: 2025-01-08
+    Created by: Seongjun Lee
+    '''
+    for file in tqdm(invalid_tif_list, desc="Removing files"):
+        try:
+            if os.path.exists(file):
+                os.remove(file)
+                print(f"Removed: {file}")
+            else:
+                print(f"File not found: {file}")
+        except Exception as e:
+            print(f"Error removing {file}: {e}")
+
+'''
+# Example usage
+_, invalid_tif_list = check_tif_files('Your_Path')
+remove_invalid_tif(invalid_tif_list)
+'''
 #---------------------------------------------------------------------------------------------------#
 #---------------------------------------------------------------------------------------------------#
 # Read raster data
@@ -44,6 +149,10 @@ def reproject(input_path, output_path, epsg_code):
     - input_path: Path to the input raster file
     - output_path: Path to save the reprojected raster file
     - epsg_code: EPSG code of the desired coordinate system (example: 3857 -> WGS 84 Pseudo-Mercator)
+
+    Last modified: None / None
+    Created on: 2024-12-27
+    Created by: Seongjun Lee
     """
     # Enable exception handling
     gdal.UseExceptions()
