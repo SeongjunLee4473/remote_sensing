@@ -1,6 +1,7 @@
 #---------------------------------------------------------------------------------------------------#
 # Import libraries
 import os
+import stat
 from tqdm.auto import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
@@ -95,6 +96,15 @@ def remove_invalid_tif(invalid_tif_list):
     Created by: Seongjun Lee
     '''
     for file in tqdm(invalid_tif_list, desc="Removing files"):
+        print(f"Attempting to remove: {file}")  # Debugging output
+        
+        # Change file permissions to allow deletion
+        try:
+            os.chmod(file, stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)  # Read and write permissions
+        except Exception as e:
+            print(f"Error changing permissions for {file}: {e}")
+            continue  # Skip to the next file if permission change fails
+
         try:
             if os.path.exists(file):
                 os.remove(file)
