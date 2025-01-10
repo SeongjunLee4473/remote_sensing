@@ -19,35 +19,35 @@ class BandReader:
         # Define the mapping of band nicknames to file names
         if product == 'L30':
             self.band_files = {
-                'coastal': 'merged_B01_WGS84.tif',     # Coastal/aerosol band
-                'blue': 'merged_B02_WGS84.tif',        # Blue band
-                'green': 'merged_B03_WGS84.tif',       # Green band
-                'red': 'merged_B04_WGS84.tif',         # Red band
-                'nir': 'merged_B05_WGS84.tif',         # Near infrared
-                'swir1': 'merged_B06_WGS84.tif',       # Short-wave infrared 1
-                'swir2': 'merged_B07_WGS84.tif',       # Short-wave infrared 2
-                'cirrus': 'merged_B09_WGS84.tif',      # Cirrus
-                'tir1': 'merged_B10_WGS84.tif',        # Thermal Infrared 1
-                'tir2': 'merged_B11_WGS84.tif',        # Thermal Infrared 2
-                'qa': 'merged_Fmask_WGS84.tif'         # QA band
+                'coastal': 'merged_B01_EPSG4326.tif',     # Coastal/aerosol band
+                'blue': 'merged_B02_EPSG4326.tif',        # Blue band
+                'green': 'merged_B03_EPSG4326.tif',       # Green band
+                'red': 'merged_B04_EPSG4326.tif',         # Red band
+                'nir': 'merged_B05_EPSG4326.tif',         # Near infrared
+                'swir1': 'merged_B06_EPSG4326.tif',       # Short-wave infrared 1
+                'swir2': 'merged_B07_EPSG4326.tif',       # Short-wave infrared 2
+                'cirrus': 'merged_B09_EPSG4326.tif',      # Cirrus
+                'tir1': 'merged_B10_EPSG4326.tif',        # Thermal Infrared 1
+                'tir2': 'merged_B11_EPSG4326.tif',        # Thermal Infrared 2
+                'qa': 'merged_Fmask_EPSG4326.tif'         # QA band
             }
 
         elif product == 'S30':
             self.band_files = {
-                'coastal': 'merged_B01_WGS84.tif',     # Coastal/aerosol band
-                'blue': 'merged_B02_WGS84.tif',        # Blue band
-                'green': 'merged_B03_WGS84.tif',       # Green band
-                'red': 'merged_B04_WGS84.tif',         # Red band
-                'red_edge1': 'merged_B05_WGS84.tif',   # Red edge 1
-                'red_edge2': 'merged_B06_WGS84.tif',   # Red edge 2
-                'red_edge3': 'merged_B07_WGS84.tif',   # Red edge 3
-                'nir': 'merged_B08_WGS84.tif',         # Near-infrared
-                'red_edge4': 'merged_B8A_WGS84.tif',   # Red edge 4
-                'water_vapor': 'merged_B09_WGS84.tif', # Water vapor
-                'cirrus': 'merged_B10_WGS84.tif',      # Cirrus
-                'swir1': 'merged_B11_WGS84.tif',       # Short-wave infrared 1
-                'swir2': 'merged_B12_WGS84.tif',       # Short-wave infrared 2
-                'qa': 'merged_Fmask_WGS84.tif'         # QA band
+                'coastal': 'merged_B01_EPSG4326.tif',     # Coastal/aerosol band
+                'blue': 'merged_B02_EPSG4326.tif',        # Blue band
+                'green': 'merged_B03_EPSG4326.tif',       # Green band
+                'red': 'merged_B04_EPSG4326.tif',         # Red band
+                'red_edge1': 'merged_B05_EPSG4326.tif',   # Red edge 1
+                'red_edge2': 'merged_B06_EPSG4326.tif',   # Red edge 2
+                'red_edge3': 'merged_B07_EPSG4326.tif',   # Red edge 3
+                'nir': 'merged_B08_EPSG4326.tif',         # Near-infrared
+                'red_edge4': 'merged_B8A_EPSG4326.tif',   # Red edge 4
+                'water_vapor': 'merged_B09_EPSG4326.tif', # Water vapor
+                'cirrus': 'merged_B10_EPSG4326.tif',      # Cirrus
+                'swir1': 'merged_B11_EPSG4326.tif',       # Short-wave infrared 1
+                'swir2': 'merged_B12_EPSG4326.tif',       # Short-wave infrared 2
+                'qa': 'merged_Fmask_EPSG4326.tif'         # QA band
             }
 
     def __getitem__(self, key):
