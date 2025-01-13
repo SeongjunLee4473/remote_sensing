@@ -221,7 +221,7 @@ def plot(raster_file,
         if transform is None:
             raise ValueError("Transform must be provided when raster_data is a numpy array.")
     elif transform is None:  # Use raster file path
-        raster_data, transform, raster_crs = read_raster(raster_file)
+        raster_data, transform, raster_crs = read(raster_file)
         # Check if the coordinate reference system is EPSG:4326
         if raster_crs.to_string() != 'EPSG:4326':
             raise ValueError(f"This code is based on the WGS 84 coordinate system, "
@@ -235,7 +235,7 @@ def plot(raster_file,
         raster_data, transform = raster_file, transform
 
     # Plot
-    plt.figure(figsize=(12, 8))
+    plt.figure(figsize=(12, 8), dpi=600)
 
     # Set default values if not provided
     cmap = cmap if cmap is not None else 'viridis'
