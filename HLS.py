@@ -20,35 +20,35 @@ class BandReader:
         # Define the mapping of band nicknames to file names
         if product == 'L30':
             self.band_files = {
-                'coastal': f'merged_B01_{date}_EPSG4326.tif',     # Coastal/aerosol band
-                'blue': f'merged_B02_{date}_EPSG4326.tif',        # Blue band
-                'green': f'merged_B03_{date}_EPSG4326.tif',       # Green band
-                'red': f'merged_B04_{date}_EPSG4326.tif',         # Red band
-                'nir': f'merged_B05_{date}_EPSG4326.tif',         # Near infrared
-                'swir1': f'merged_B06_{date}_EPSG4326.tif',       # Short-wave infrared 1
-                'swir2': f'merged_B07_{date}_EPSG4326.tif',       # Short-wave infrared 2
-                'cirrus': f'merged_B09_{date}_EPSG4326.tif',      # Cirrus
-                'tir1': f'merged_B10_{date}_EPSG4326.tif',        # Thermal Infrared 1
-                'tir2': f'merged_B11_{date}_EPSG4326.tif',        # Thermal Infrared 2
-                'qa': f'merged_Fmask_{date}_EPSG4326.tif'         # QA band
+                'coastal': f'B01_merged_{date}.tif',     # Coastal/aerosol band
+                'blue': f'B02_merged_{date}.tif',        # Blue band
+                'green': f'B03_merged_{date}.tif',       # Green band
+                'red': f'B04_merged_{date}.tif',         # Red band
+                'nir': f'B05_merged_{date}.tif',         # Near infrared (narrowband)
+                'swir1': f'B06_merged_{date}.tif',       # Short-wave infrared 1
+                'swir2': f'B07_merged_{date}.tif',       # Short-wave infrared 2
+                'cirrus': f'B09_merged_{date}.tif',      # Cirrus
+                'tir1': f'B10_merged_{date}.tif',        # Thermal Infrared 1
+                'tir2': f'B11_merged_{date}.tif',        # Thermal Infrared 2
+                'qa': f'Fmask_{date}.tif'         # QA band
             }
 
         elif product == 'S30':
             self.band_files = {
-                'coastal': f'merged_B01_{date}_EPSG4326.tif',     # Coastal/aerosol band
-                'blue': f'merged_B02_{date}_EPSG4326.tif',        # Blue band
-                'green': f'merged_B03_{date}_EPSG4326.tif',       # Green band
-                'red': f'merged_B04_{date}_EPSG4326.tif',         # Red band
-                'red_edge1': f'merged_B05_{date}_EPSG4326.tif',   # Red edge 1
-                'red_edge2': f'merged_B06_{date}_EPSG4326.tif',   # Red edge 2
-                'red_edge3': f'merged_B07_{date}_EPSG4326.tif',   # Red edge 3
-                'nir': f'merged_B08_{date}_EPSG4326.tif',         # Near-infrared
-                'red_edge4': f'merged_B8A_{date}_EPSG4326.tif',   # Red edge 4
-                'water_vapor': f'merged_B09_{date}_EPSG4326.tif', # Water vapor
-                'cirrus': f'merged_B10_{date}_EPSG4326.tif',      # Cirrus
-                'swir1': f'merged_B11_{date}_EPSG4326.tif',       # Short-wave infrared 1
-                'swir2': f'merged_B12_{date}_EPSG4326.tif',       # Short-wave infrared 2
-                'qa': f'merged_Fmask_{date}_EPSG4326.tif'         # QA band
+                'coastal': f'B01_merged_{date}.tif',     # Coastal/aerosol band
+                'blue': f'B02_merged_{date}.tif',        # Blue band
+                'green': f'B03_merged_{date}.tif',       # Green band
+                'red': f'B04_merged_{date}.tif',         # Red band
+                'red_edge1': f'B05_merged_{date}.tif',   # Red edge 1
+                'red_edge2': f'B06_merged_{date}.tif',   # Red edge 2
+                'red_edge3': f'B07_merged_{date}.tif',   # Red edge 3
+                'nir_broad': f'B08_merged_{date}.tif',   # Near-infrared (broadband)
+                'nir': f'B8A_merged_{date}.tif',         # Near-infrared (narrowband)
+                'water_vapor': f'B09_merged_{date}.tif', # Water vapor
+                'cirrus': f'B10_merged_{date}.tif',      # Cirrus
+                'swir1': f'B11_merged_{date}.tif',       # Short-wave infrared 1
+                'swir2': f'B12_merged_{date}.tif',       # Short-wave infrared 2
+                'qa': f'Fmask_{date}.tif'                # QA band
             }
 
     def __getitem__(self, key):
