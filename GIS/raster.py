@@ -150,6 +150,62 @@ raster_data, raster_transform = read_raster(raster_file_path)
 '''
 #---------------------------------------------------------------------------------------------------#
 #---------------------------------------------------------------------------------------------------#
+# Get lon_1d and lat_1d from the given TIF file path or data and transform.
+def get_lon_lat(input_data, transform=None, dem=1):
+    """
+    Calculate lon_1d and lat_1d from the given TIF file path or data and transform.
+
+    Parameters:
+    input_data (str or np.ndarray): The file path to the TIF file or the water percentage data.
+    transform (Affine, optional): The affine transformation if input_data is not a file path.
+    dem (int, optional): The dimension of the output. 1 for 1D (lon_1d, lat_1d), 2 for 2D (lon_2d, lat_2d).
+
+    Returns:
+    tuple: lon_1d and lat_1d arrays or lon_2d and lat_2d arrays based on dem.
+    """
+    if isinstance(input_data, str) and input_data.endswith('.tif'):
+        # Load Pekel data from TIF file
+        water_percentage, water_transform, _ = raster.read(input_data)
+    elif transform is not None:
+        # Use provided data and transform
+        water_percentage = input_data
+        water_transform = transform
+    else:
+        raise ValueError("Invalid input: Provide a .tif file path or data with transform.")
+
+    # Extract parameters from the Affine transformation
+    pixel_width = water_transform.a
+    top_left_x = water_transform.c
+    pixel_height = water_transform.e  # This is negative
+    top_left_y = water_transform.f
+
+    ncols = water_percentage.shape[1]  # Number of columns
+    nrows = water_percentage.shape[0]   # Number of rows
+
+    if dem == 1:
+        lon_1d = top_left_x + np.arange(ncols) * pixel_width
+        lat_1d = top_left_y + np.arange(nrows) * pixel_height  # Note: pixel_height is negative
+        return lon_1d, lat_1d
+    elif dem == 2:
+        lon_2d, lat_2d = np.meshgrid(
+            top_left_x + np.arange(ncols) * pixel_width,
+            top_left_y + np.arange(nrows) * pixel_height
+        )
+        return lon_2d, lat_2d
+    else:
+        raise ValueError("Invalid dem value: must be 1 or 2.")
+    
+'''
+# Example usage with .tif file
+# 1. Calculate lon_1d and lat_1d
+tif_path = os.path.join(cpuserver_data_FP, 'HLS/Korea/L30/20130411/B02_merged_20130411.tif')
+lon_1d, lat_1d = get_lon_lat(tif_path)
+
+# 2. Calculate lon_2d and lat_2d
+lon_2d, lat_2d = get_lon_lat(tif_path, dem=2)
+'''
+#---------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------#
 # Function to reproject raster to a desired EPSG coordinate system
 def reproject(input_path, output_path, epsg_code):
     """
