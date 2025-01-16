@@ -30,7 +30,7 @@ class BandReader:
                 'cirrus': f'B09_merged_{date}.tif',      # Cirrus
                 'tir1': f'B10_merged_{date}.tif',        # Thermal Infrared 1
                 'tir2': f'B11_merged_{date}.tif',        # Thermal Infrared 2
-                'qa': f'Fmask_{date}.tif'         # QA band
+                'qa': f'Fmask_merged_{date}.tif'         # QA band
             }
 
         elif product == 'S30':
@@ -48,7 +48,7 @@ class BandReader:
                 'cirrus': f'B10_merged_{date}.tif',      # Cirrus
                 'swir1': f'B11_merged_{date}.tif',       # Short-wave infrared 1
                 'swir2': f'B12_merged_{date}.tif',       # Short-wave infrared 2
-                'qa': f'Fmask_{date}.tif'                # QA band
+                'qa': f'Fmask_merged_{date}.tif'        # QA band
             }
 
     def __getitem__(self, key):

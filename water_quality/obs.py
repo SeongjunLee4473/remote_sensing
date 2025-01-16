@@ -105,7 +105,9 @@ def extract_pixels_near_points(gdf, raster_data, transform, radius_deg, min_pixe
                                 'point': coords,
                                 'pixel_value': pixel_value,
                                 'pixel_lon': lon,
-                                'pixel_lat': lat
+                                'pixel_lat': lat,
+                                'idx_lon': x,
+                                'idx_lat': y
                             })
 
     # Convert results to a DataFrame
