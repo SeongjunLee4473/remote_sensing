@@ -1,1 +1,2 @@
 # Remote-Sensing
+This repository serves as a comprehensive framework for the preprocessing and utilization of satellite data. It includes modularized scripts and tools tailored for handling remote sensing datasets, ensuring efficient data preparation and processing. Additionally, it hosts research-related code designed to support and enhance analytical workflows, leveraging processed satellite data for various scientific studies and applications.
