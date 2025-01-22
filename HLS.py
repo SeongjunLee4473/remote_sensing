@@ -14,6 +14,8 @@ class BandReader:
         self.product = product
         self.folder_path = folder_path
         self.date = date
+        self.scale = 0.0001
+        self.scale_001 = 0.01
         self.fill_value = -9999
         self.qa_fill_value = 255
 
@@ -54,28 +56,53 @@ class BandReader:
     def __getitem__(self, key):
         return getattr(self, key)
 
-    def get_band_with_transform(self, band):
+    def get_band_with_transform(self, band, product):
         """Return band data along with its affine transform."""
         band_file = self.band_files.get(band)
         if not band_file:
             raise ValueError(f"No such band: {band}")
         path = f"{self.folder_path}/{band_file}"
         with rasterio.open(path) as src:
-            if band == 'qa':
-                data = src.read(1).astype('uint8')
-            else:
-                data = src.read(1).astype('float32')
+            if product == 'L30':
+                if band == 'qa':
+                    data = src.read(1).astype('uint8')
+                elif band in ['tir1', 'tir2']:
+                    data = src.read(1).astype('float32') 
+                else:
+                    data = src.read(1).astype('float32') 
+                    data = data * self.scale
+            elif product == 'S30':
+                if band == 'qa':
+                    data = src.read(1).astype('uint8')
+                else:
+                    data = src.read(1).astype('float32') 
+                    data = data * self.scale
 
             data = np.where(data == self.fill_value, np.nan, data)
 
         return data, src.transform, src.crs
 
-    def _read_band(self, band_file):
+    def _read_band(self, band, band_file, product):
         """Read and process a single band file."""
         path = f"{self.folder_path}/{band_file}"
 
         with rasterio.open(path) as src:
-            data = src.read(1).astype('float32')
+            if product == 'L30':
+                if band == 'qa':
+                    data = src.read(1).astype('uint8')
+                elif band in ['tir1', 'tir2']:
+                    data = src.read(1).astype('float32')
+                    data = data * self.scale_001
+                else:
+                    data = src.read(1).astype('float32')
+                    data = data * self.scale
+            elif product == 'S30':
+                if band == 'qa':
+                    data = src.read(1).astype('uint8')
+                else:
+                    data = src.read(1).astype('float32')
+                    data = data * self.scale
+
             data = np.where(data == self.fill_value, np.nan, data)
 
         return data
@@ -103,7 +130,7 @@ class BandReader:
         """Generic getter to fetch band data based on band name."""
         band_file = self.band_files.get(band)
         if band_file:
-            return self._read_band(band_file)
+            return self._read_band(band, band_file, self.product)
         else:
             raise AttributeError(f"No such band: {band}")
 #------------------------------------------------------#
