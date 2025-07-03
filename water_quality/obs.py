@@ -6,10 +6,11 @@ import geopandas as gpd
 import folium
 #---------------------------------------------------------------------------------------------------#
 # Function to load and prepare data
-def points_to_gdf(csv_file_path):
+def points_to_gdf(data_input):
     """
-    This function loads a CSV file containing point coordinates (longitude and latitude),
-    creates a GeoDataFrame (Point) from these coordinates.
+    This function loads a CSV file containing point coordinates (longitude and latitude)
+    or directly uses a pandas DataFrame, and then creates a GeoDataFrame (Point)
+    from these coordinates.
 
     CSV structure: The CSV file should contain the following columns:
     - ptNo: Point number (example: 3008B40)
@@ -18,11 +19,18 @@ def points_to_gdf(csv_file_path):
     - lat: Latitude (decimal degree, example: 35.123456)
 
     Last modified: 2024-12-27 / Rename from create_point_gdf to points_to_gdf
+    Modified: 2025-07-03 / Added DataFrame input capability
     Created on: 2024-12-27
     Created by: Seongjun Lee
     """
-    # Load the filtered GeoDataFrame from the CSV file
-    df = pd.read_csv(csv_file_path)
+    if isinstance(data_input, str):
+        # If input is a string, assume it's a CSV file path and load it
+        df = pd.read_csv(data_input)
+    elif isinstance(data_input, pd.DataFrame):
+        # If input is already a DataFrame, use it directly
+        df = data_input
+    else:
+        raise TypeError("Input must be a CSV file path (string) or a pandas DataFrame.")
 
     # Create a GeoDataFrame from the DataFrame using lon and lat
     point_gdf = gpd.GeoDataFrame(
@@ -37,9 +45,25 @@ def points_to_gdf(csv_file_path):
     return point_gdf
 
 '''
-# Example usage:
-csv_file_path = 'path/to/obs_data.csv'
-obs_geometry_gdf = points_to_gdf(csv_file_path)
+# Example usage with a CSV file path:
+# csv_file_path = 'path/to/obs_data.csv'
+# obs_geometry_gdf_from_csv = points_to_gdf(csv_file_path)
+# print("GeoDataFrame from CSV:")
+# print(obs_geometry_gdf_from_csv.head())
+
+# Example usage with a DataFrame:
+# Create a sample DataFrame
+# data = {
+#     'ptNo': ['3008B40', '3008B41', '3008B42'],
+#     'ptNm': ['대청댐1', '서울', '부산'],
+#     'lon': [127.123456, 126.978, 129.075],
+#     'lat': [35.123456, 37.566, 35.179]
+# }
+# sample_df = pd.DataFrame(data)
+
+# obs_geometry_gdf_from_df = points_to_gdf(sample_df)
+# print("\nGeoDataFrame from DataFrame:")
+# print(obs_geometry_gdf_from_df.head())
 '''
 #---------------------------------------------------------------------------------------------------#
 # Function to extract pixel values around points
@@ -147,7 +171,7 @@ def plot_points(csv_file_path, ptNo):
         point = df[df['ptNo'].astype(str).str[:4] == str(ptNo)]
     else:
         point = df[df['ptNo'] == ptNo]
-    
+
     if point.empty:
         print(f"ptNo {ptNo} not found.")
         return
@@ -157,14 +181,14 @@ def plot_points(csv_file_path, ptNo):
     center_lon = point['lon'].mean()
     m = folium.Map(location=[center_lat, center_lon], zoom_start=12, tiles='OpenStreetMap',
                     attr='Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors')
-    
+
     for _, row in point.iterrows():
         folium.Marker(
             location=[row['lat'], row['lon']],
             popup=f"{row['ptNm']} (ptNo: {row['ptNo']})",
             icon=folium.Icon(color='blue')
         ).add_to(m)
-    
+
     # Display the map directly
     return m
 
