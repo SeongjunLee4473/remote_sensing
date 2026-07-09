@@ -194,7 +194,7 @@ def plot_points(csv_file_path, ptNo):
 
 '''
 # Example usage
-csv_file_path = '/home/seongjun/water_quality/obs_data/obs_coordinate_2024.csv'
+csv_file_path = '/path/to/obs_coordinate.csv'
 point_code = '3008B40'  # Change to the ptNo you want to plot (If you type 4 digits, all points with the same 4 digits will be plotted)
 plot_points(csv_file_path, point_code)
 '''

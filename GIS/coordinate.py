@@ -57,7 +57,7 @@ def convert_dms_to_dd(file_path, save=False, save_path=None):
 
 '''
 # Apply the function to the uploaded file
-file_path = '/home/seongjun/Downloads/obs_coords_2025.csv'
-save_path = '/home/seongjun/Downloads/obs_coords_2025_new.csv'
+file_path = '/path/to/obs_coords.csv'
+save_path = '/path/to/obs_coords_dd.csv'
 converted_data = convert_dms_to_dd(file_path, save=True, save_path=save_path)
 '''
