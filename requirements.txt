@@ -1,0 +1,9 @@
+numpy
+pandas
+matplotlib
+rasterio
+GDAL
+cartopy
+geopandas
+folium
+tqdm
