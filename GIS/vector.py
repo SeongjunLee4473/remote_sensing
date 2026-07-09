@@ -1,5 +1,8 @@
 #---------------------------------------------------------------------------------------------------#
 # Import libraries
+import os
+import numpy as np
+import matplotlib.pyplot as plt
 import geopandas as gpd
 #---------------------------------------------------------------------------------------------------#
 #---------------------------------------------------------------------------------------------------#
@@ -127,8 +130,6 @@ def plot(vector_file,
     Created on: 2024-12-27
     Created by: Seongjun Lee
     '''
-    import geopandas as gpd
-
     # Check if vector_file is a valid path or a GeoDataFrame
     if isinstance(vector_file, str):
         if vector_file.endswith('.shp'):

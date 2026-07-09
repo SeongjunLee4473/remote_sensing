@@ -165,7 +165,7 @@ def get_lon_lat(input_data, transform=None, dem=1):
     """
     if isinstance(input_data, str) and input_data.endswith('.tif'):
         # Load Pekel data from TIF file
-        water_percentage, water_transform, _ = raster.read(input_data)
+        water_percentage, water_transform, _ = read(input_data)
     elif transform is not None:
         # Use provided data and transform
         water_percentage = input_data
@@ -337,7 +337,7 @@ def plot(raster_file,
 '''
 # Example usage
 1. If you want to directly load raster file
-raster_file_path = '/home/seongjun/water_quality/obs_data/pekel_data/pekel_2024.tif'
+raster_file_path = '/path/to/pekel_2024.tif'
 plot_raster(raster_file=raster_file_path,
             bounds=[127.0, 127.5, 35.0, 35.5],
             title='Pekel Data',

@@ -56,22 +56,22 @@ class BandReader:
     def __getitem__(self, key):
         return getattr(self, key)
 
-    def get_band_with_transform(self, band, product):
+    def get_band_with_transform(self, band):
         """Return band data along with its affine transform."""
         band_file = self.band_files.get(band)
         if not band_file:
             raise ValueError(f"No such band: {band}")
         path = f"{self.folder_path}/{band_file}"
         with rasterio.open(path) as src:
-            if product == 'L30':
+            if self.product == 'L30':
                 if band == 'qa':
                     data = src.read(1).astype('uint8')
                 elif band in ['tir1', 'tir2']:
-                    data = src.read(1).astype('float32') 
+                    data = src.read(1).astype('float32')
                 else:
-                    data = src.read(1).astype('float32') 
+                    data = src.read(1).astype('float32')
                     data = data * self.scale
-            elif product == 'S30':
+            elif self.product == 'S30':
                 if band == 'qa':
                     data = src.read(1).astype('uint8')
                 else:
@@ -155,6 +155,17 @@ class BandPlotter:
         self.band_reader = band_reader
         self.band_files = band_reader.band_files
 
+    def _add_gridlines(self, ax, line_color='gray'):
+        """Add lon/lat gridlines with consistent styling to a Cartopy axes."""
+        gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=1, color=line_color, alpha=0.5, linestyle='--')
+        gl.top_labels = False
+        gl.right_labels = False
+        gl.xformatter = gridliner.LONGITUDE_FORMATTER
+        gl.yformatter = gridliner.LATITUDE_FORMATTER
+        gl.xlabel_style = {'size': 15, 'color': 'black'}
+        gl.ylabel_style = {'size': 15, 'color': 'black'}
+        return gl
+
     def plot_band(self, band, cmap='gray', title=None, bounds=None):
         data, transform, src = self.band_reader.get_band_with_transform(band)
         fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': ccrs.PlateCarree()})
@@ -172,13 +183,7 @@ class BandPlotter:
         plt.colorbar(img, ax=ax, orientation='vertical', label='Normalized Reflectance')
         ax.add_feature(cfeature.COASTLINE)
 
-        gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=1, color='gray', alpha=0.5, linestyle='--')
-        gl.top_labels = False
-        gl.right_labels = False
-        gl.xformatter = gridliner.LONGITUDE_FORMATTER
-        gl.yformatter = gridliner.LATITUDE_FORMATTER
-        gl.xlabel_style = {'size': 15, 'color': 'black'}
-        gl.ylabel_style = {'size': 15, 'color': 'black'}
+        self._add_gridlines(ax)
 
         if title:
             plt.title(title)
@@ -251,13 +256,7 @@ class BandPlotter:
         if bounds:
             ax.set_extent(bounds, crs=ccrs.PlateCarree())
 
-        gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=1, color='gray', alpha=0.5, linestyle='--')
-        gl.top_labels = False
-        gl.right_labels = False
-        gl.xformatter = gridliner.LONGITUDE_FORMATTER
-        gl.yformatter = gridliner.LATITUDE_FORMATTER
-        gl.xlabel_style = {'size': 15, 'color': 'black'}
-        gl.ylabel_style = {'size': 15, 'color': 'black'}
+        self._add_gridlines(ax)
 
         if title:
             plt.title(title)
@@ -335,13 +334,7 @@ class BandPlotter:
         if bounds:
             ax.set_extent(bounds, crs=ccrs.PlateCarree())
 
-        gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=1, color='gray', alpha=0.5, linestyle='--')
-        gl.top_labels = False
-        gl.right_labels = False
-        gl.xformatter = gridliner.LONGITUDE_FORMATTER
-        gl.yformatter = gridliner.LATITUDE_FORMATTER
-        gl.xlabel_style = {'size': 15, 'color': 'black'}
-        gl.ylabel_style = {'size': 15, 'color': 'black'}
+        self._add_gridlines(ax)
 
         if title:
             plt.title(title)
@@ -386,13 +379,7 @@ class BandPlotter:
         img = ax.imshow(data, cmap=cmap, extent=extent, origin='upper', interpolation='none', norm=norm)
         ax.add_feature(cfeature.COASTLINE)
 
-        gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linewidth=1, color='black', alpha=0.5, linestyle='--')
-        gl.top_labels = False
-        gl.right_labels = False
-        gl.xformatter = gridliner.LONGITUDE_FORMATTER
-        gl.yformatter = gridliner.LATITUDE_FORMATTER
-        gl.xlabel_style = {'size': 15, 'color': 'black'}
-        gl.ylabel_style = {'size': 15, 'color': 'black'}
+        self._add_gridlines(ax, line_color='black')
 
         # Handle legend creation based on threshold presence
         if threshold is not None:
