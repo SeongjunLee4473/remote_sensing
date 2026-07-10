@@ -28,7 +28,7 @@ remote_sensing/
 ├── HLS.py              # HLS L30/S30 band reader, plotter, and water index calculator
 ├── water_quality/
 │   └── obs.py          # Observation point <-> GeoDataFrame, raster sampling, Folium plotting
-├── tutorials/           # Worked preprocessing examples (see tutorials/README.md)
+├── tutorials/          # Worked preprocessing examples (see tutorials/README.md)
 ├── requirements.txt
 └── LICENSE
 ```
