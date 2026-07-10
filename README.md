@@ -28,9 +28,14 @@ remote_sensing/
 ├── HLS.py              # HLS L30/S30 band reader, plotter, and water index calculator
 ├── water_quality/
 │   └── obs.py          # Observation point <-> GeoDataFrame, raster sampling, Folium plotting
+├── tutorials/           # Worked preprocessing examples (see tutorials/README.md)
 ├── requirements.txt
 └── LICENSE
 ```
+
+## Tutorials
+
+[`tutorials/`](tutorials/) has worked, raw-to-analysis-ready preprocessing notebooks that build on the modules above. Currently: [`hls_l30_s30`](tutorials/hls_l30_s30/) — cross-sensor comparison of NASA HLS L30 (Landsat) and S30 (Sentinel-2), covering valid-pixel ROI intersection, RGB composites, cross-sensor NDVI, and each product's unique bands (L30 thermal, S30 red edge).
 
 ## Installation
 

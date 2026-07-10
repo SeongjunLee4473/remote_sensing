@@ -4,6 +4,7 @@ matplotlib
 rasterio
 GDAL
 cartopy
+pyproj
 geopandas
 folium
 tqdm

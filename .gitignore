@@ -16,6 +16,9 @@ venv/
 # Jupyter
 .ipynb_checkpoints/
 
+# Tutorial sample data (not committed - see each tutorials/*/README.md for sourcing)
+tutorials/**/data/
+
 # IDE
 .vscode/
 .idea/
