@@ -15,7 +15,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A collection of Python utilities for preprocessing and analyzing satellite and geospatial data: generic raster/vector GIS helpers, a reader/plotter for NASA Harmonized Landsat Sentinel-2 (HLS) products, and tools for working with in-situ water quality observation points.
+A collection of Python utilities for preprocessing and analyzing satellite and geospatial data: generic raster/vector GIS helpers, a reader/plotter for NASA Harmonized Landsat Sentinel-2 (HLS) products, a reader/plotter for MODIS MOD13Q1/MYD13Q1 vegetation index time series, and tools for working with in-situ water quality observation points.
 
 ## Repository Structure
 
@@ -26,6 +26,7 @@ remote_sensing/
 │   ├── vector.py       # Vector (Shapefile) I/O, CRS handling, plotting
 │   └── coordinate.py   # DMS <-> decimal degree coordinate conversion
 ├── HLS.py              # HLS L30/S30 band reader, plotter, and water index calculator
+├── MODIS.py            # MOD13Q1/MYD13Q1 NDVI/EVI time series reader, QA decoder, and plotter
 ├── water_quality/
 │   └── obs.py          # Observation point <-> GeoDataFrame, raster sampling, Folium plotting
 ├── tutorials/          # Worked preprocessing examples (see tutorials/README.md)
@@ -35,7 +36,10 @@ remote_sensing/
 
 ## Tutorials
 
-[`tutorials/`](tutorials/) has worked, raw-to-analysis-ready preprocessing notebooks that build on the modules above. Currently: [`hls_l30_s30`](tutorials/hls_l30_s30/) — cross-sensor comparison of NASA HLS L30 (Landsat) and S30 (Sentinel-2), covering valid-pixel ROI intersection, RGB composites, cross-sensor NDVI, and each product's unique bands (L30 thermal, S30 red edge).
+[`tutorials/`](tutorials/) has worked, raw-to-analysis-ready preprocessing notebooks that build on the modules above. Currently:
+
+- [`hls_l30_s30`](tutorials/hls_l30_s30/) — cross-sensor comparison of NASA HLS L30 (Landsat) and S30 (Sentinel-2), covering valid-pixel ROI intersection, RGB composites, cross-sensor NDVI, and each product's unique bands (L30 thermal, S30 red edge).
+- [`modis_vi_timeseries`](tutorials/modis_vi_timeseries/) — multi-year MODIS MOD13Q1 NDVI/EVI time series over rice-paddy cropland, covering Pixel Reliability masking, NDVI-vs-EVI seasonal comparison, and simple start/peak/end-of-season phenology extraction.
 
 ## Installation
 
@@ -93,6 +97,27 @@ plotter.plot_index(mndwi, transform, threshold=0.1, title="MNDWI")
 
 clear_mask = HLS.is_cloud(reader.qa)
 water_mask = HLS.is_water(reader.qa)
+```
+
+### `MODIS.py`
+
+Reader, QA decoder, and plotter for MODIS MOD13Q1/MYD13Q1 vegetation index time series (as exported by NASA AppEEARS, one NetCDF file per AOI covering every requested date).
+
+```python
+import MODIS
+
+reader = MODIS.VITimeSeriesReader("path/to/MOD13Q1.061_250m_aid0001.nc")
+ndvi = reader.ndvi()  # masked via Pixel Reliability by default
+evi = reader.evi()
+
+bbox = (126.70, 35.65, 127.05, 35.95)  # west, south, east, north (WGS84)
+ndvi_roi = reader.roi_mean(ndvi, bbox=bbox)  # AOI-mean time series
+
+plotter = MODIS.VIPlotter(reader)
+plotter.plot_timeseries(ndvi_roi, label="NDVI")
+plotter.plot_map(ndvi.isel(time=0).values, title="NDVI snapshot")
+
+reliable_mask = MODIS.is_reliable(reader.reliability().values)
 ```
 
 ### `water_quality/`
